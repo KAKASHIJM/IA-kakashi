@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barbearia do David</title>
+
+  <style>
+    :root {
+      --bg-color: #0f0f0f;
+      --card-bg: #1a1a1a;
+      --gold: #d4af37;
+      --red: #8b0000;
+      --text-light: #f5f5f5;
+      --green: #25D366;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-light);
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+      text-align: center;
+    }
+
+    .header h1 {
+      color: var(--gold);
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .title-box {
+      background: var(--gold);
+      color: #000;
+      font-weight: bold;
+      padding: 8px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .service-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .service-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #252525;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 4px solid var(--gold);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .service-item:hover {
+      background: #303030;
+    }
+
+    .service-item input {
+      accent-color: var(--gold);
+      transform: scale(1.2);
+    }
+
+    .service-info {
+      text-align: left;
+      margin-left: 10px;
+      flex-grow: 1;
+    }
+
+    .service-name {
+      font-weight: bold;
+      display: block;
+    }
+
+    .service-price {
+      color: var(--gold);
+      font-weight: bold;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #111;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    /* DATA E HORÁRIO */
+    .data-hora {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .data-hora .form-group {
+      margin-bottom: 15px;
+    }
+
+    /* PAGAMENTO */
+    .pagamento-title {
+      text-align: left;
+      color: #ccc;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .pagamentos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .pagamento-option {
+      position: relative;
+    }
+
+    .pagamento-option input {
+      display: none;
+    }
+
+    .pagamento-option label {
+      display: block;
+      padding: 13px 8px;
+      background: #252525;
+      border: 1px solid #444;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: bold;
+    }
+
+    .pagamento-option input:checked + label {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+
+    .pix-info {
+      display: none;
+      background: #111;
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: -10px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      color: #ddd;
+    }
+
+    .pix-info strong {
+      color: var(--gold);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--green);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: 0.2s;
+    }
+
+    .btn-submit:hover {
+      background: #1ebc57;
+      transform: translateY(-1px);
+    }
+
+    .footer {
+      margin-top: 15px;
+      font-size: 0.8rem;
+      color: var(--gold);
+    }
+
+    @media (max-width: 380px) {
+      .data-hora {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>Barbearia do David</h1>
+      <p>Campinas - BA</p>
+    </div>
+
+    <div class="title-box">
+      Tabela de Valores
+    </div>
+
+    <form id="barberForm">
+
+      <!-- SERVIÇOS -->
+      <div class="service-list">
+
+        <label class="service-item">
+          <input type="checkbox" name="servico" value="Corte + Barba" data-price="30.00">
+          <div class="service-info">
+            <span class="service-name">Corte + Barba</span>
+          </div>
+          <span class="service-price">R$ 30,00</span>
+        </label>
+
+        <label class="service-item">
+          <input type="checkbox" name="servico" value="Corte + Pigmentação" data-price="30.00">
+          <div class="service-info">
+            <span class="service-name">Corte + Pigmentação</span>
+          </div>
+          <span class="service-price">R$ 30,00</span>
+        </label>
+
+        <label class="service-item">
+          <input type="checkbox" name="servico" value="Corte + Navalhado" data-price="25.00">
+          <div class="service-info">
+            <span class="service-name">Corte + Navalhado</span>
+          </div>
+          <span class="service-price">R$ 25,00</span>
+        </label>
+
+        <label class="service-item">
+          <input type="checkbox" name="servico" value="Corte + Máquina" data-price="20.00">
+          <div class="service-info">
+            <span class="service-name">Corte + Máquina</span>
+          </div>
+          <span class="service-price">R$ 20,00</span>
+        </label>
+
+        <label class="service-item">
+          <input type="checkbox" name="servico" value="Pezinho" data-price="5.00">
+          <div class="service-info">
+            <span class="service-name">Pezinho</span>
+          </div>
+          <span class="service-price">R$ 5,00</span>
+        </label>
+
+      </div>
+
+      <!-- NOME -->
+      <div class="form-group">
+        <label for="cliente">Seu Nome:</label>
+        <input
+          type="text"
+          id="cliente"
+          required
+          placeholder="Digite seu nome"
+        >
+      </div>
+
+      <!-- DATA E HORÁRIO -->
+      <div class="data-hora">
+
+        <div class="form-group">
+          <label for="data">📅 Data:</label>
+          <input
+            type="date"
+            id="data"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="horario">🕐 Horário:</label>
+          <input
+            type="time"
+            id="horario"
+            required
+          >
+        </div>
+
+      </div>
+
+      <!-- PAGAMENTO -->
+      <div class="pagamento-title">
+        💰 Forma de pagamento:
+      </div>
+
+      <div class="pagamentos">
+
+        <div class="pagamento-option">
+          <input
+            type="radio"
+            id="dinheiro"
+            name="pagamento"
+            value="Dinheiro"
+            required
+          >
+          <label for="dinheiro">
+            💵 Dinheiro
+          </label>
+        </div>
+
+        <div class="pagamento-option">
+          <input
+            type="radio"
+            id="pix"
+            name="pagamento"
+            value="Pix"
+          >
+          <label for="pix">
+            💚 Pix
+          </label>
+        </div>
+
+      </div>
+
+      <div class="pix-info" id="pixInfo">
+        <strong>Pagamento via Pix</strong><br>
+        A chave Pix será informada pelo barbeiro no atendimento.
+      </div>
+
+      <!-- BOTÃO -->
+      <button
+        type="button"
+        class="btn-submit"
+        onclick="enviarWhatsapp()"
+      >
+        Agendar pelo WhatsApp
+      </button>
+
+    </form>
+
+    <div class="footer">
+      📍 Rua da Cajá
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // Define a data mínima como hoje
+    const dataInput = document.getElementById("data");
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    const dia = String(hoje.getDate()).padStart(2, "0");
+
+    dataInput.min = `${ano}-${mes}-${dia}`;
+
+
+    // Mostra informação do Pix quando selecionado
+    const pixRadio = document.getElementById("pix");
+    const dinheiroRadio = document.getElementById("dinheiro");
+    const pixInfo = document.getElementById("pixInfo");
+
+    pixRadio.addEventListener("change", function() {
+      if (this.checked) {
+        pixInfo.style.display = "block";
+      }
+    });
+
+    dinheiroRadio.addEventListener("change", function() {
+      if (this.checked) {
+        pixInfo.style.display = "none";
+      }
+    });
+
+
+    // Enviar agendamento para WhatsApp
+    function enviarWhatsapp() {
+
+      // IMPORTANTE:
+      // Coloque aqui o número real do WhatsApp.
+      // Exemplo: 5577999999999
+      const telefone = "5571999042120";
+
+      const nome = document.getElementById("cliente").value.trim();
+      const data = document.getElementById("data").value;
+      const horario = document.getElementById("horario").value;
+
+      const pagamentoSelecionado =
+        document.querySelector('input[name="pagamento"]:checked');
+
+
+      // Verificar nome
+      if (!nome) {
+        alert("Por favor, informe seu nome.");
+        return;
+      }
+
+
+      // Verificar data
+      if (!data) {
+        alert("Por favor, escolha uma data.");
+        return;
+      }
+
+
+      // Verificar horário
+      if (!horario) {
+        alert("Por favor, escolha um horário.");
+        return;
+      }
+
+
+      // Verificar serviço
+      const checkboxes =
+        document.querySelectorAll('input[name="servico"]:checked');
+
+      if (checkboxes.length === 0) {
+        alert("Selecione pelo menos um serviço.");
+        return;
+      }
+
+
+      // Verificar pagamento
+      if (!pagamentoSelecionado) {
+        alert("Escolha uma forma de pagamento.");
+        return;
+      }
+
+
+      // Serviços e total
+      let servicos = [];
+      let total = 0;
+
+      checkboxes.forEach(function(cb) {
+
+        servicos.push(cb.value);
+
+        total += parseFloat(
+          cb.getAttribute("data-price")
+        );
+
+      });
+
+
+      // Formatar data para DD/MM/AAAA
+      const partesData = data.split("-");
+
+      const dataFormatada =
+        `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+
+
+      // Criar mensagem
+      const mensagem =
+        `*✂️ NOVO AGENDAMENTO - BARBEARIA DO DAVID*%0A%0A` +
+
+        `👤 *Cliente:* ${nome}%0A` +
+
+        `💈 *Serviços:* ${servicos.join(", ")}%0A` +
+
+        `💰 *Total:* R$ ${total.toFixed(2).replace(".", ",")}%0A` +
+
+        `📅 *Data:* ${dataFormatada}%0A` +
+
+        `🕐 *Horário:* ${horario}%0A` +
+
+        `💳 *Pagamento:* ${pagamentoSelecionado.value}`;
+
+
+      // Abrir WhatsApp
+      window.open(
+        `https://wa.me/${telefone}?text=${mensagem}`,
+        "_blank"
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>
